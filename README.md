@@ -1,7 +1,11 @@
 # AsociatyvusSTL
 Ši programa nuskaito tekstas.txt failą, randa pasikartotinius žodžius, parašo kiek kartų pasikartoja ir kuriose eilutėse jie egzistuoja. (išrašo konsolėje bei atsakymas.txt faile)  
 **ARBA**  
-Programa nuskaito tekstas.txt failą ir randa URL linkus ir išrašo konsolėje bei atsakymas.txt faile
+Programa nuskaito tekstas.txt failą ir randa URL linkus ir išrašo konsolėje bei atsakymas.txt faile  
+
+Programa naudoja map, set STL konteinerius (taip pat ir vector)  
+Programa naudoja biblioteką dirbti su failais (fstream, sstream)  
+Programa naudoja std::string biblioteką
 
 ![](pirmas.png)
 ![](antras.png)
