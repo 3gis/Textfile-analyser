@@ -20,128 +20,129 @@ using std::set;
 using std::cin;
 
 void insert(map <string, int>& map1, const string& word);
-bool Tikrinimas(const char & o);
-bool Tikrinimasspace(const char & o);
-string pasikartojimas(string map1,vector <string>& p);
+bool tikrinimas(const char& o);
+bool tikrinimasSpace(const char& o);
+string pasikartojimas(string map1, vector <string>& p);
 
 int main()
 {
-    ifstream fd ("tekstas.txt");
-    ofstream ff ("atsakymas.txt");
+    ifstream nuskaitymas("tekstas.txt");
+    ofstream irasymas("atsakymas.txt");
     map <string, int> Mappas;
-    vector <string> p;
-    stringstream ss;
-    string k;
-    if(fd.is_open()){
-        ss << fd.rdbuf();
-        fd.close();
+    vector <string> sakiniuVektorius;
+    stringstream visasTekstas;
+    string sakinys;
+    if (nuskaitymas.is_open()) {
+        visasTekstas << nuskaitymas.rdbuf();
+        nuskaitymas.close();
     }
     string pasirinkimas;
-    kl:
-    cout << "(1) Zodziu pasikartojimai;\n";
-    cout << "(2) URL adresu ieskojimas;\n";
-    cout << "Pasirinkimas: ";
-    cin >> pasirinkimas;
-    if(pasirinkimas == "1"){
-        fd.open("tekstas.txt", std::ifstream::in);
-        while(!fd.eof()){
-            getline(fd,k);
-            //replace(k.begin(),k.end(),Tikrinimasspace,' ');
-            k.erase(remove_if(k.begin(),k.end(),Tikrinimasspace),k.end());
-            p.push_back(k);
-        }
-        fd.close();
-        string t;
-        while(ss >> t){
-        t.erase(remove_if(t.begin(),t.end(),Tikrinimas),t.end());
-        //cout << t << "\n";
-        insert(Mappas, t);
-        }
-        char buffer[80];
-        sprintf(buffer, "%-20s %-20s %-20s \n","Zodis", "Pasikartojimai", "Eilutes");
-        cout << buffer;
-        ff << buffer;
-        for (int i = 0; i < 80; i++, cout << "-", ff << "-");
-        cout << "\n";
-        ff << "\n";
-        for(auto it = Mappas.cbegin(); it != Mappas.cend(); ++it){
-            if(it->second !=1 && it!=Mappas.cbegin()){
+    bool kriterijus = true;
+    while (kriterijus)
+    {
+        cout << "(1) Zodziu pasikartojimai;\n";
+        cout << "(2) URL adresu ieskojimas;\n";
+        cout << "Paspauskite (1) jei norite pirmos funkcijos, paspauskite (2) jei antros: ";
+        cin >> pasirinkimas;
+        
+        if (pasirinkimas == "1") {
+            kriterijus = false;
+            nuskaitymas.open("tekstas.txt", std::ifstream::in);
+            while (!nuskaitymas.eof()) {
+                getline(nuskaitymas, sakinys);
+                sakinys.erase(remove_if(sakinys.begin(), sakinys.end(), tikrinimasSpace), sakinys.end());
+                sakiniuVektorius.push_back(sakinys);
+            }
 
-                //cout << it->first << " " << it->second << " | " << pasikartojimas(it->first,p,ff) << "\n";
-                sprintf(buffer, "%-20s %-20i %-20s \n", it->first.c_str(), it->second, pasikartojimas(it->first,p).c_str());
-                cout << buffer;
-                ff << buffer;
+            nuskaitymas.close();
+            string zodis;
+            while (visasTekstas >> zodis) {
+                zodis.erase(remove_if(zodis.begin(), zodis.end(), tikrinimas), zodis.end());
+                insert(Mappas, zodis);
+            }
+            char buffer[80];
+            sprintf(buffer, "%-20s %-20s %-20s \n", "Zodis", "Pasikartojimai", "Eilutes");
+            cout << buffer;
+            irasymas << buffer;
+            for (int i = 0; i < 80; i++, cout << "-", irasymas << "-");
+            cout << "\n";
+            irasymas << "\n";
+            for (auto it = Mappas.cbegin(); it != Mappas.cend(); ++it) {
+                if (it->second != 1 && it != Mappas.cbegin()) {
+                    sprintf(buffer, "%-20s %-20i %-20s \n", it->first.c_str(), it->second, pasikartojimas(it->first, sakiniuVektorius).c_str());
+                    cout << buffer;
+                    irasymas << buffer;
+                }
             }
         }
-    }
-    else if(pasirinkimas == "2"){
-        string t;
-        set<string> Settas;
-        while(ss>>t){
-            if((t[0]=='h' && t[1]=='t' && t[2]=='t' && t[3]=='p') || (t[0]=='w' && t[1]=='w' && t[2]=='w'))
-                Settas.insert(t);
-        }
-        char buffer[80];
-        sprintf(buffer, "%-20s\n","Svetaines URL");
-        cout << buffer;
-        ff << buffer;
-        for (int i = 0; i < 80; i++, cout << "-", ff << "-");
-        cout << "\n";
-        ff << "\n";
-        for(auto i : Settas){
-            sprintf(buffer, "%-20s\n",i.c_str());
+        else if (pasirinkimas == "2") {
+            kriterijus = false;
+            string raide;
+            set<string> Settas;
+            while (visasTekstas >> raide) {
+                if ((raide[0] == 'h' && raide[1] == 't' && raide[2] == 't' && raide[3] == 'p') || (raide[0] == 'w' && raide[1] == 'w' && raide[2] == 'w'))
+                    Settas.insert(raide);
+            }
+            char buffer[80];
+            sprintf(buffer, "%-20s\n", "Svetaines URL");
             cout << buffer;
-            ff << buffer;
-            for (int i = 0; i < 80; i++, cout << "-", ff << "-");
+            irasymas << buffer;
+            for (int i = 0; i < 80; i++, cout << "-", irasymas << "-");
             cout << "\n";
-            ff << "\n";
+            irasymas << "\n";
+            for (auto i : Settas) {
+                sprintf(buffer, "%-20s\n", i.c_str());
+                cout << buffer;
+                irasymas << buffer;
+                for (int i = 0; i < 80; i++, cout << "-", irasymas << "-");
+                cout << "\n";
+                irasymas << "\n";
+            }
         }
-    }
-    else{
-        cout << "Tokio pasirinkimo nera..\n";
-        goto kl;
+        else {
+            cout << "Tokio pasirinkimo nera..\n";
+        }
     }
     return 0;
 }
+
 void insert(map <string, int>& map1, const string& word)
 {
     ++map1[word];
 }
-bool Tikrinimas(const char & o)
+bool tikrinimas(const char& o)
 {
-    return !((o > 64 && o < 90) || (o >96 && o<123));
+    return !((o > 64 && o < 90) || (o > 96 && o < 123));
 }
-bool Tikrinimasspace(const char & o)
+bool tikrinimasSpace(const char& o)
 {
-    return !((o > 64 && o < 90) || (o >96 && o<123) || o == 32);
+    return !((o > 64 && o < 90) || (o > 96 && o < 123) || o == 32);
 }
-string pasikartojimas(string map1, vector <string>& p){
-    //vector <string> p;
+string pasikartojimas(string map1, vector <string>& p) {
     string t;
     string atsakymas;
-    bool didIt=false;
-    for(int i = 0; i<p.size();i++){
-        didIt=false;
-        for(auto j : p[i]){
-            if(j!=' ' && j!='\n')
-            t+=j;
-            else{
-                if(map1==t){
-                    auto y = std::to_string(i+1);
-                    atsakymas+= y + " ";
-                    didIt=true;
+    bool didIt = false;
+    for (int i = 0; i < p.size(); i++) {
+        didIt = false;
+        for (auto j : p[i]) {
+            if (j != ' ' && j != '\n')
+                t += j;
+            else {
+                if (map1 == t) {
+                    auto y = std::to_string(i + 1);
+                    atsakymas += y + " ";
+                    didIt = true;
                     break;
                 }
-                t="";
+                t = "";
             }
         }
-        if(map1==t && didIt==false){
-            auto y = std::to_string(i+1);
-            atsakymas+= y + " ";
+        if (map1 == t && didIt == false) {
+            auto y = std::to_string(i + 1);
+            atsakymas += y + " ";
             break;
         }
-        t="";
+        t = "";
     }
-
     return atsakymas;
 }
