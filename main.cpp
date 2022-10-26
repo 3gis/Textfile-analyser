@@ -104,7 +104,6 @@ int main()
         }
     }
     return 0;
-
 }
 
 void insert(map <string, int>& map1, const string& word)
@@ -145,6 +144,5 @@ string pasikartojimas(string map1, vector <string>& p) {
         }
         t = "";
     }
-
     return atsakymas;
 }
